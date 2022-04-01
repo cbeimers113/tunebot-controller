@@ -41,7 +41,6 @@ class ControllerFrontend(GridLayout):
         def __init__(self, **kwargs):
             """Instantiate the controls panel."""
             super(ControllerFrontend.ControlsPanel, self).__init__(**kwargs)
-            # TODO: Change layout to something more practical
             with self.canvas:
                 Rectangle(pos=(0.25 * DISPLAY_SIZE[0], 0), size=DISPLAY_SIZE)
             self.cols = 1
