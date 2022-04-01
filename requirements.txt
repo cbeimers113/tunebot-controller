@@ -1,0 +1,8 @@
+numpy
+pandas
+sklearn
+scipy
+joblib
+numexpr
+matplotlib
+python-nmap
