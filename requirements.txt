@@ -1,8 +1,12 @@
-numpy
-pandas
-sklearn
-scipy
 joblib
-numexpr
+kivy
 matplotlib
+numexpr
+numpy
+pafy
+pandas
 python-nmap
+python-vlc
+scipy
+sklearn
+youtube-dl==2020.12.2

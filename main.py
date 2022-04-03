@@ -1,8 +1,7 @@
-from backend.network import load_connected_devices
+from tunebot.frontend import FrontEnd
 
 
-RUNNING = False
-
-if __name__ == '__main__' and not RUNNING:
-    RUNNING = True
-    devices = load_connected_devices(debug=True)
+if __name__ == '__main__':
+    # Create and start the application
+    FrontEnd.FRONTEND = FrontEnd()
+    FrontEnd.FRONTEND.run()

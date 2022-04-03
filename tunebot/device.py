@@ -1,6 +1,7 @@
 import json
 import requests
 
+from tunebot.song import Song
 from util.log import Log
 
 
@@ -8,7 +9,7 @@ class Device:
     """Encapsulate device data and associate with a playlist/blacklist."""
 
     def __init__(self, device_name, mac_address, ip_address, manufacturer):
-        """Initialize a device."""
+        """ Initialize a device."""
         self._username = 'Unknown'
         self._device_name = device_name
         self._mac_address = mac_address
@@ -24,11 +25,11 @@ class Device:
         try:
             # url = 'http://tunebot-api.graansma.dev:8080/device/user/get/'
             # data = requests.post(
-            #     url, data='{' + f'\n\t"mac": "{self._mac_address}"' + '\n}').json()
+            #     url, data='{' + f'\n\t"mac": "{self._mac_address}"' + '\n}', timeout=15).json()
 
             data = None
 
-            with open('backend/receive.json', 'r') as f:
+            with open('data/receive.json', 'r') as f:
                 data = json.load(f)
 
             # If the received object contains an error code, there is no user associated with this device
@@ -45,7 +46,10 @@ class Device:
                 self._log.info('Loading blacklist...')
 
                 for song in data['blacklist']['songs']:
-                    self._blacklist.add(song['url'])
+                    bl_song = Song(song['url'])
+
+                    if bl_song.resolve():
+                        self._blacklist.add(bl_song)
             else:
                 self._log.warn(
                     f'{self._username}\'s blacklist was not enabled, not considering')
@@ -66,7 +70,10 @@ class Device:
                                 f'Found "{url}" in both {self._username}\'s playlist "{playlist_name}" and blacklist!')
                             continue
 
-                        self._playlist.add(url)
+                        pl_song = Song(url)
+
+                        if pl_song.resolve():
+                            self._playlist.add(pl_song)
 
                     self._log.info(f'Added "{playlist_name}" to playlist')
                 else:
@@ -97,11 +104,11 @@ class Device:
 
     def get_playlist(self):
         """Return the playlist of the user associated with this device."""
-        return self._playlist
+        return list(self._playlist)
 
     def get_blacklist(self):
         """Return the blacklist of the user associated with this device."""
-        return self._blacklist
+        return list(self._blacklist)
 
     def __str__(self):
         return f'Name: {self._device_name}\nMAC address: {self._mac_address}\nIP address: {self._ip_address}\nManufacturer: {self._manufacturer}'
