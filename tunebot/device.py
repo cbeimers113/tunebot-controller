@@ -1,7 +1,6 @@
 import json
 import requests
 
-from tunebot.song import Song
 from util.log import Log
 
 
@@ -10,13 +9,13 @@ class Device:
 
     def __init__(self, device_name, mac_address, ip_address, manufacturer):
         """ Initialize a device."""
-        self._username = 'Unknown'
+        self._username = None
         self._device_name = device_name
         self._mac_address = mac_address
         self._ip_address = ip_address
         self._manufacturer = manufacturer
-        self._playlist = set()
-        self._blacklist = set()
+        self._playlist = []
+        self._blacklist = []
         self._log = Log()
         self._load_user()
 
@@ -46,10 +45,10 @@ class Device:
                 self._log.info('Loading blacklist...')
 
                 for song in data['blacklist']['songs']:
-                    bl_song = Song(song['url'])
+                    bl_song = song['url']
 
-                    if bl_song.resolve():
-                        self._blacklist.add(bl_song)
+                    if bl_song not in self._blacklist:
+                        self._blacklist.append(bl_song)
             else:
                 self._log.warn(
                     f'{self._username}\'s blacklist was not enabled, not considering')
@@ -70,10 +69,10 @@ class Device:
                                 f'Found "{url}" in both {self._username}\'s playlist "{playlist_name}" and blacklist!')
                             continue
 
-                        pl_song = Song(url)
+                        pl_song = url
 
-                        if pl_song.resolve():
-                            self._playlist.add(pl_song)
+                        if pl_song not in self._playlist:
+                            self._playlist.append(pl_song)
 
                     self._log.info(f'Added "{playlist_name}" to playlist')
                 else:
@@ -85,6 +84,10 @@ class Device:
             self._log.error(
                 f'Error retrieving user associated with {self._device_name}, could not reach API:')
             self._log.no_prefix(e)
+
+    def get_username(self):
+        """Get the device's user's username."""
+        return self._username
 
     def get_device_name(self):
         """Get the device's name."""
@@ -104,11 +107,11 @@ class Device:
 
     def get_playlist(self):
         """Return the playlist of the user associated with this device."""
-        return list(self._playlist)
+        return self._playlist
 
     def get_blacklist(self):
         """Return the blacklist of the user associated with this device."""
-        return list(self._blacklist)
+        return self._blacklist
 
     def __str__(self):
         return f'Name: {self._device_name}\nMAC address: {self._mac_address}\nIP address: {self._ip_address}\nManufacturer: {self._manufacturer}'

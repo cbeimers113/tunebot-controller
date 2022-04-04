@@ -1,10 +1,12 @@
 import os
 import nmap
 import threading
+from random import shuffle
 
 from kivy.clock import Clock
 
 from tunebot.device import Device
+from tunebot.song import Song
 from util.log import Log
 
 
@@ -16,10 +18,12 @@ class BackEnd:
 
     def __init__(self, refresh_frontend):
         """Initialize the controller backend."""
-        self.playlist = set()
+        self._playlist = []
+        self._now_playing = None
         self._log = Log()
         self._refreshing = False
         self._refresh_interval_sec = 5 * 60  # Refresh every 5 minutes
+        self._users = set()  # Keep track of which users are on the network
 
         # Call this function after backend refreshing to refresh gui
         self._refresh_frontend = refresh_frontend
@@ -42,21 +46,91 @@ class BackEnd:
         if not self._refreshing:
             threading.Thread(target=self._refresh).start()
 
+    def get_playlist(self):
+        """Get the current playlist."""
+        return self._playlist
+
+    def get_now_playing(self):
+        """Get the currently playing song."""
+        return self._now_playing
+
+    def next_song(self):
+        """Move to the next song."""
+        if not self._playlist:
+            return
+
+        try:
+            index = self._playlist.index(self._now_playing)
+            index = (index + 1) % len(self._playlist)
+            self._now_playing = self._playlist[index]
+        except ValueError:
+            self._now_playing = self._playlist[0]
+
+    def previous_song(self):
+        """Move to the previous song."""
+        if not self._playlist:
+            return
+
+        try:
+            index = self._playlist.index(self._now_playing)
+            index = (index - 1) % len(self._playlist)
+            self._now_playing = self._playlist[index]
+        except ValueError:
+            self._now_playing = self._playlist[-1]
+
+    def shuffle(self):
+        """Shuffle the playlist."""
+        if self._now_playing:
+            self._playlist.remove(self._now_playing)
+
+        shuffle(self._playlist)
+
+        if self._now_playing:
+            self._playlist = [self._now_playing] + self._playlist
+
     def _refresh(self):
         """Refresh the playlist."""
         self._refreshing = True
         devices = self._load_connected_devices()
-        self.playlist = set()
+        self._playlist = []
         playlist = []  # The playlist before removing blacklisted songs
         blacklist = []
+        found_users = set()
 
         for device in devices:
-            playlist += device.get_playlist()
-            blacklist += device.get_blacklist()
+            username = device.get_username()
+
+            if username:
+                playlist += device.get_playlist()
+                blacklist += device.get_blacklist()
+                found_users.add(username)
 
         for song in playlist:
-            if song not in blacklist:
-                self.playlist.add(song)
+            pl_song = Song(song)
+
+            if pl_song not in blacklist and pl_song.resolve():
+                self._playlist.append(pl_song)
+
+        # If we aren't currently playing a song, choose the first one
+        if self._now_playing is None and self._playlist:
+            self._now_playing = self._playlist[0]
+
+        # Check if user list has changed
+        users_changed = False
+
+        for user in found_users:
+            if user not in self._users:
+                users_changed = True
+                self._log.info(f'New user on network: {user}')
+
+        for user in self._users:
+            if user not in found_users:
+                users_changed = True
+                self._log.info(f'User left the network: {user}')
+
+        if users_changed:
+            self._users = list(found_users)
+            self.shuffle()
 
         self._refreshing = False
         Clock.schedule_once(self._refresh_frontend)
