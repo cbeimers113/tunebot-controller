@@ -174,6 +174,7 @@ class FrontEnd(App):
             Window.size = DISPLAY_SIZE
             Window.clearcolor = COL_BG
             Window.borderless = True
+            Window.fullscreen = 'auto'
 
         def on_button_refresh(self, _):
             """Refresh button callback.

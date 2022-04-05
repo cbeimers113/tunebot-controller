@@ -1,3 +1,4 @@
+colorama
 joblib
 kivy
 matplotlib
