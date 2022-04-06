@@ -1,0 +1,39 @@
+{
+    "id": "ae423f60-3f50-449b-970d-c3aa536dc646",
+    "username": "Testing",
+    "playlists": [
+        {
+            "id": "86af840b-dbe0-4a37-aa53-1755de64ed0c",
+            "name": "Test Playlist",
+            "enabled": true,
+            "songs": [
+                {
+                    "id": "86af840b-dbe0-4a37-aa53-1755de64ed0a",
+                    "url": "https://www.youtube.com/watch?v=hC8CH0Z3L54"
+                },
+                {
+                    "id": "86af840b-dbe0-4a37-aa53-1755de64ed0b",
+                    "url": "https://www.youtube.com/watch?v=FoMpHjqYaQY"
+                },
+                {
+                    "id": "86af840b-dbe0-4a37-aa53-1755de64ed0c",
+                    "url": "https://www.youtube.com/watch?v=y-E7_VHLvkE"
+                },
+                {
+                    "id": "86af840b-dbe0-4a37-aa53-1755de64ed0d",
+                    "url": "https://www.youtube.com/watch?v=2ZdmSSDLdcQ"
+                },
+                {
+                    "id": "86af840b-dbe0-4a37-aa53-1755de64ed0e",
+                    "url": "https://www.youtube.com/watch?v=gtLQ3PKN1Qw"
+                }
+            ]
+        }
+    ],
+    "blacklist": {
+        "id": "",
+        "name": "Test Blacklist",
+        "enabled": true,
+        "songs": []
+    }
+}

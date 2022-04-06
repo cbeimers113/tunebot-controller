@@ -3,13 +3,15 @@
 This is the controller for Tunebot. It uses the [Tunebot API](https://github.com/bronson-g/tunebot-api).
 
 ### Requirements
-- python 3
+- Python 3
+- pip for Python 3
 - nmap
 - vlc
 - pulseaudio
 
-To install these packages:
-`sudo apt install python3 nmap vlc pulseaudio`
+By default, nmap and pulseaudio should be installed. 
+To install these packages on a Debian distro, execute the following command:
+`sudo apt install python3 python3-pip nmap vlc pulseaudio`
 
 ### Python Requirements
 These are all listed in requirements.txt
