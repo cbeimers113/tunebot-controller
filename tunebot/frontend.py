@@ -17,8 +17,8 @@ COL_BG = (1, 1, 1, 1)
 COL_TITLE = (0, 0.5, 0.5, 1)
 COL_TEXT = (0.25, 0, 1, 1)
 COL_BUTTON = (0.8, 0.8, 0.8, 1)
-FONT_TITLE = 'data/font/Rodina_Nesselova.otf'
-FONT_UI = 'data/font/OpenSans-Regular.ttf'
+FONT_TITLE = 'font/Rodina_Nesselova.otf'
+FONT_UI = 'font/OpenSans-Regular.ttf'
 DEFAULT_THUMB = 'https://www.pngkit.com/png/full/3-38748_musical-notes-png.png'
 
 
@@ -173,8 +173,8 @@ class FrontEnd(App):
 
             Window.size = DISPLAY_SIZE
             Window.clearcolor = COL_BG
-            Window.borderless = True
-            Window.fullscreen = 'auto'
+            # Window.borderless = True
+            # Window.fullscreen = 'auto'
 
         def on_button_refresh(self, _):
             """Refresh button callback.

@@ -24,11 +24,11 @@ class Device:
         try:
             # url = 'http://tunebot-api.graansma.dev:8080/device/user/get/'
             # data = requests.post(
-            #     url, data='{' + f'\n\t"mac": "{self._mac_address}"' + '\n}', timeout=15).json()
+                # url, data='{' + f'\n\t"mac": "{self._mac_address}"' + '\n}', timeout=3).json()
 
             data = None
 
-            with open('data/receive.json', 'r') as f:
+            with open('test/receive.json', 'r') as f:
                 data = json.load(f)
 
             # If the received object contains an error code, there is no user associated with this device

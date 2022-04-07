@@ -9,8 +9,8 @@ class Song:
     def __init__(self, url):
         """Initialize a song."""
         self._log = Log()
-        self._url = url
         self._video = None
+        self._url = url
         self._title = 'Unknown'
         self._author = 'Unknown'
         self._thumb = 'Unknown'
@@ -21,6 +21,7 @@ class Song:
 
         try:
             self._video = pafy.new(self._url)
+            self._url = self._video.getbestaudio().url
             self._title = self._video.title
             self._author = self._video.author
             self._thumb = self._video.bigthumb
