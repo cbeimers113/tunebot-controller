@@ -27,7 +27,7 @@ class BackEnd:
 
         # Call this function after backend refreshing to refresh gui
         self._refresh_frontend = refresh_frontend
-        self.refresh()  # Perform an initial refresh of the playlist
+        self.refresh(None)  # Perform an initial refresh of the playlist
 
     def set_refresh_interval_sec(self, refresh_interval_sec):
         """Set the interval in seconds at which the controller scans for users."""
@@ -41,7 +41,7 @@ class BackEnd:
         """Get the refresh interval."""
         return self._refresh_interval_sec
 
-    def refresh(self):
+    def refresh(self, _):
         """Refresh the playlist in the background."""
         if not self._refreshing:
             threading.Thread(target=self._refresh).start()

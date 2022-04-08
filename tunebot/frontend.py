@@ -165,6 +165,9 @@ class FrontEnd(App):
             self._paused = False
             self._vlc_instance = vlc.Instance()
             self._player = self._vlc_instance.media_player_new()
+            self._vlc_events_mgr = self._player.event_manager()
+            self._vlc_events_mgr.event_attach(
+                vlc.EventType.MediaPlayerEndReached, self.on_end_song, None)
 
             self._queue_panel = FrontEnd.Application.QueuePanel(self)
             self._control_panel = FrontEnd.Application.ControlPanel(self)
@@ -222,10 +225,24 @@ class FrontEnd(App):
 
             if song is not None:
                 self._player.stop()
-                media = self._vlc_instance.media_new(song.get_url())
-                media.get_mrl()
-                self._player.set_media(media)
-                self._player.play()
+                
+                try:
+                    media = self._vlc_instance.media_new(song.get_url())
+                    media.get_mrl()
+                    self._player.set_media(media)
+                    self._player.play()
+                except Exception as e:
+                    print('Error:')
+                    print(e.with_traceback)
+
+
+        def on_end_song(self, _, __):
+            """Perform when a song finishes playing."""
+            # Must schedule the action to run on kivy's thread
+            # because it won't allow the frontend to be modified from
+            # another thread (in this case, the vlc's event manager
+            # calling this when a song finishes and its thread returns)
+            Clock.schedule_once(self.on_button_next_song)
 
         def stop(self):
             """Stop playing music."""
