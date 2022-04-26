@@ -157,32 +157,32 @@ class BackEnd:
                    '192.168.0.1', 'Ingvonic Studios')
         ]
 
-        # if nmap_address:
-        #     nm = nmap.PortScanner()
-        #     try:
-        #         nm.scan(nmap_address, arguments='-sP')['scan']
+        if nmap_address:
+            nm = nmap.PortScanner()
+            try:
+                nm.scan(nmap_address, arguments='-sP')['scan']
 
-        #         # Load devices that are on the network
-        #         for ip_address in nm.all_hosts():
-        #             hosts = nm[ip_address]
-        #             device_name = hosts['hostnames'][0]['name']
-        #             mac_address = "-"
-        #             manufacturer = "-"
+                # Load devices that are on the network
+                for ip_address in nm.all_hosts():
+                    hosts = nm[ip_address]
+                    device_name = hosts['hostnames'][0]['name']
+                    mac_address = "-"
+                    manufacturer = "-"
 
-        #             if 'mac' in hosts['addresses']:
-        #                 mac_address = hosts['addresses']['mac']
+                    if 'mac' in hosts['addresses']:
+                        mac_address = hosts['addresses']['mac']
 
-        #                 if mac_address in hosts['vendor']:
-        #                     manufacturer = hosts['vendor'][mac_address]
+                        if mac_address in hosts['vendor']:
+                            manufacturer = hosts['vendor'][mac_address]
 
-        #             devices.append(
-        #                 Device(device_name, mac_address,
-        #                        ip_address, manufacturer)
-        #             )
+                    devices.append(
+                        Device(device_name, mac_address,
+                               ip_address, manufacturer)
+                    )
 
-        #     # Catch any errors with nmap
-        #     except Exception as e:
-        #         self._log.error('An error occured with nmap:')
-        #         self._log.no_prefix(e)
+            # Catch any errors with nmap
+            except Exception as e:
+                self._log.error('An error occured with nmap:')
+                self._log.no_prefix(e)
 
         return devices

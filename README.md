@@ -16,7 +16,7 @@ To install these packages on a Debian distro, execute the following command: \
 ### Python Requirements
 These are all listed in requirements.txt \
 To install these packages: \
-`pip3 install -r requirements.txt`
+`sudo pip3 install -r requirements.txt`
 
 ### Run the Controller
 The controller must be run as root to allow nmap to find devices on the network. \

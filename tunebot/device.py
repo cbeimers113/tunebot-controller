@@ -22,14 +22,15 @@ class Device:
     def _load_user(self):
         """Request the account data associated with this MAC address."""
         try:
-            # url = 'http://tunebot-api.graansma.dev:8080/device/user/get/'
-            # data = requests.post(
-                # url, data='{' + f'\n\t"mac": "{self._mac_address}"' + '\n}', timeout=3).json()
+            url = 'http://tunebot-api.graansma.dev:8080/device/user/get/'
+            data = requests.post(
+                url, data='{' + f'\n\t"mac": "{self._mac_address}"' + '\n}', timeout=3
+            ).json()
 
-            data = None
+            # data = None
 
-            with open('test/receive.json', 'r') as f:
-                data = json.load(f)
+            # with open('test/receive.json', 'r') as f:
+            #     data = json.load(f)
 
             # If the received object contains an error code, there is no user associated with this device
             if not data or 'error' in list(data.keys()):
