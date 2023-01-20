@@ -1,6 +1,6 @@
 # Tunebot Controller
 
-This is the controller for Tunebot. It uses the [Tunebot API](https://github.com/bronson-g/tunebot-api).
+This was the controller for Tunebot. It uses the [Tunebot API](https://github.com/bronson-g/tunebot-api).
 
 ### Requirements
 - Python 3
